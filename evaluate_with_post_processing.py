@@ -15,12 +15,10 @@ def evaluate(threshold, file_list, label_path, post_prosecced_path):
     for img_name in tqdm(file_list):
         img = cv2.imread(pred_dir + img_name)
         _, threshed = cv2.threshold(img, threshold, 255, type=cv2.THRESH_BINARY)
-        ################################################################################################################
-        # call image post processing functions
+        # post processing
         mask = np.zeros((226, 226, 3))
         filled = fill_holes(threshed, threshold,0.1)
         denoised = remove_small_areas(filled, threshold, 0.05)
-        ################################################################################################################
         cv2.imwrite('whatever/filled/' + img_name, filled)
         cv2.imwrite('whatever/post_processed/' + img_name, denoised)
 
@@ -28,11 +26,10 @@ def evaluate(threshold, file_list, label_path, post_prosecced_path):
     for filename in tqdm(file_list):
         label = cv2.imread(label_path + filename,0)
         post_prosecced = cv2.imread(post_prosecced_path + filename,0)
-        xdim = label.shape[0]
-        ydim = label.shape[1]
+        xdim, ydim = label.shape
         for x in range(xdim):
             for y in range(ydim):
-                if post_prosecced[x, y] and label[x, y] > threshold:
+                if label[x, y] > threshold and post_prosecced[x, y]:
                     true_positives += 1
                 if label[x, y] > threshold > post_prosecced[x, y]:
                     false_negatives += 1

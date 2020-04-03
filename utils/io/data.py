@@ -93,10 +93,10 @@ class DataGen:
 
     @staticmethod
     def change_color_space(image, label, color_space):
-        if color_space.lower() is 'hsi' or 'hsv':
+        if color_space.lower() == 'hsi' or 'hsv':
             image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
             label = cv2.cvtColor(label, cv2.COLOR_BGR2HSV)
-        elif color_space.lower() is 'lab':
+        elif color_space.lower() == 'lab':
             image = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
             label = cv2.cvtColor(label, cv2.COLOR_BGR2LAB)
         return image, label
